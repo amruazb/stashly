@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stashly - Stash Your Cash</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Theme Toggle -->
+    <div class="theme-toggle">
+        <i class="fas fa-moon" id="theme-icon"></i>
+    </div>
+
+    <!-- Language Selector -->
+    <div class="language-selector">
+        <select id="language-select">
+            <option value="en">English</option>
+            <option value="ar">العربية</option>
+            <option value="ur">اردو</option>
+        </select>
+    </div>
+
+    <!-- Currency Selector -->
+    <div class="currency-selector">
+        <select id="currency-select">
+            <option value="AED">AED (درهم)</option>
+            <option value="USD">USD ($)</option>
+            <option value="PKR">PKR (₨)</option>
+        </select>
+    </div>
+
+    <!-- Login/Signup Modal -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="auth-container">
+                <div class="auth-tabs">
+                    <button class="tab-btn active" data-tab="login">Login</button>
+                    <button class="tab-btn" data-tab="signup">Sign Up</button>
+                </div>
+                
+                <!-- Login Form -->
+                <div id="login-form" class="auth-form active">
+                    <h2 data-translate="login">Login</h2>
+                    <input type="email" placeholder="Email" data-translate-placeholder="email" required>
+                    <input type="password" placeholder="Password" data-translate-placeholder="password" required>
+                    <button type="submit" class="btn-primary" data-translate="login">Login</button>
+                </div>
+                
+                <!-- Signup Form -->
+                <div id="signup-form" class="auth-form">
+                    <h2 data-translate="signup">Sign Up</h2>
+                    <input type="text" id="username" placeholder="Name" data-translate-placeholder="name" required>
+                    <input type="number" id="age" placeholder="Age" data-translate-placeholder="age" min="13" max="100" required>
+                    <select id="gender" required>
+                        <option value="" data-translate="select_gender">Select Gender</option>
+                        <option value="male" data-translate="male">Male</option>
+                        <option value="female" data-translate="female">Female</option>
+                    </select>
+                    <input type="email" placeholder="Email" data-translate-placeholder="email" required>
+                    <input type="password" placeholder="Password" data-translate-placeholder="password" required>
+                    
+                    <!-- Avatar Selection -->
+                    <div class="avatar-selection">
+                        <h3 data-translate="choose_avatar">Choose Your Avatar</h3>
+                        <div class="avatar-grid">
+                            <div class="avatar-option" data-avatar="1">👨‍🎓</div>
+                            <div class="avatar-option" data-avatar="2">👩‍🎓</div>
+                            <div class="avatar-option" data-avatar="3">🧑‍💻</div>
+                            <div class="avatar-option" data-avatar="4">👨‍🔬</div>
+                            <div class="avatar-option" data-avatar="5">👩‍🎨</div>
+                            <div class="avatar-option" data-avatar="6">🧑‍🎓</div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary" data-translate="signup">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h1>Stashly</h1>
+                <span class="slogan" data-translate="slogan">Stash Your Cash</span>
+            </div>
+            <div class="nav-menu">
+                <a href="#dashboard" class="nav-link" data-translate="dashboard">Dashboard</a>
+                <a href="#goals" class="nav-link" data-translate="goals">Goals</a>
+                <a href="#rewards" class="nav-link" data-translate="rewards">Rewards</a>
+                <a href="#ai-chat" class="nav-link" data-translate="ai_assistant">AI Assistant</a>
+                <a href="#support" class="nav-link" data-translate="support">Support</a>
+                <div class="user-avatar" id="user-avatar">👨‍🎓</div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Welcome Section -->
+        <section id="welcome" class="section active">
+            <div class="welcome-content">
+                <h1 class="main-title">Stashly</h1>
+                <p class="main-slogan" data-translate="slogan">Stash Your Cash</p>
+                    AI-powered budget management for smart students. Master the 50/30/20 rule and achieve your financial goals!
+                </p>
+                <div class="action-buttons">
+                    <button class="btn-primary" id="get-started" data-translate="get_started">Get Started</button>
+                    <button class="btn-secondary" id="learn-more" data-translate="learn_more">Learn More</button>
+                </div>
+                
+                <!-- QR Code -->
+                <div class="qr-section">
+                    <h3 data-translate="scan_qr">Scan QR Code to Access</h3>
+                    <div class="qr-code">
+                        <canvas id="qr-canvas"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="section">
+            <div class="dashboard-header">
+                <h2 data-translate="dashboard">Dashboard</h2>
+                <div class="user-stats">
+                    <div class="stat-item">
+                        <span class="stat-label" data-translate="coins">Coins</span>
+                        <span class="stat-value" id="user-coins">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label" data-translate="streak">Streak</span>
+                        <span class="stat-value" id="user-streak">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Piggy Bank -->
+            <div class="piggy-bank-section">
+                <div class="piggy-bank" id="piggy-bank">
+                    <div class="piggy-face">
+                        <div class="piggy-eyes">
+                            <div class="eye"></div>
+                            <div class="eye"></div>
+                        </div>
+                        <div class="piggy-snout"></div>
+                    </div>
+                    <div class="piggy-body"></div>
+                    <div class="piggy-legs">
+                        <div class="leg"></div>
+                        <div class="leg"></div>
+                        <div class="leg"></div>
+                        <div class="leg"></div>
+                    </div>
+                </div>
+                <p class="piggy-message" id="piggy-message" data-translate="piggy_happy">I'm happy when you save!</p>
+            </div>
+
+            <!-- Budget Setup -->
+            <div class="budget-setup">
+                <h3 data-translate="set_monthly_budget">Set Your Monthly Pocket Money</h3>
+                <div class="input-group">
+                    <input type="number" id="pocket-money" placeholder="Enter amount" min="1">
+                    <span class="currency-symbol" id="currency-symbol">AED</span>
+                    <button class="btn-primary" id="set-budget" data-translate="set_budget">Set Budget</button>
+                </div>
+            </div>
+
+            <!-- Budget Overview -->
+            <div class="budget-overview">
+                <div class="budget-card needs">
+                    <h3 data-translate="needs">Needs (50%)</h3>
+                    <div class="amount" id="needs-amount">250 AED</div>
+                    <div class="remaining" id="needs-remaining">Remaining: 250 AED</div>
+                    <div class="progress-bar">
+                        <div class="progress" id="needs-progress"></div>
+                    </div>
+                </div>
+                <div class="budget-card wants">
+                    <h3 data-translate="wants">Wants (30%)</h3>
+                    <div class="amount" id="wants-amount">150 AED</div>
+                    <div class="remaining" id="wants-remaining">Remaining: 150 AED</div>
+                    <div class="progress-bar">
+                        <div class="progress" id="wants-progress"></div>
+                    </div>
+                </div>
+                <div class="budget-card savings">
+                    <h3 data-translate="savings">Savings (20%)</h3>
+                    <div class="amount" id="savings-amount">100 AED</div>
+                    <div class="remaining" id="savings-remaining">Saved: 0 AED</div>
+                    <div class="progress-bar">
+                        <div class="progress" id="savings-progress"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Daily Actions -->
+            <div class="daily-actions">
+                <h3 data-translate="everyday_actions">Everyday Actions</h3>
+                <div class="action-buttons">
+                    <button class="action-btn" id="add-expense" data-translate="add_expense">
+                        <i class="fas fa-plus"></i> Add Expense
+                    </button>
+                    <button class="action-btn" id="add-savings" data-translate="add_savings">
+                        <i class="fas fa-piggy-bank"></i> Add to Savings
+                    </button>
+                    <button class="action-btn" id="view-history" data-translate="view_history">
+                        <i class="fas fa-history"></i> View History
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Goals Section -->
+        <section id="goals" class="section">
+            <div class="goals-header">
+                <h2 data-translate="goals">Financial Goals</h2>
+                <button class="btn-primary" id="add-goal" data-translate="add_goal">Add Goal</button>
+            </div>
+            
+            <div class="goals-container">
+                <div class="goals-list" id="goals-list">
+                    <!-- Goals will be added dynamically -->
+                </div>
+            </div>
+
+            <!-- Achievements -->
+            <div class="achievements">
+                <h3 data-translate="achievements">Achievements</h3>
+                <div class="achievements-list" id="achievements-list">
+                    <!-- Achievements will be added dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Rewards Section -->
+        <section id="rewards" class="section">
+            <div class="rewards-header">
+                <h2 data-translate="rewards">Rewards Store</h2>
+                <div class="coins-display">
+                    <i class="fas fa-coins"></i>
+                    <span id="rewards-coins">0</span> <span data-translate="coins">Coins</span>
+                </div>
+            </div>
+            
+            <div class="rewards-grid">
+                <div class="reward-card" data-cost="500">
+                    <div class="reward-icon">🍕</div>
+                    <h3>Pizza Hut</h3>
+                    <p data-translate="pizza_discount">5% off your order</p>
+                    <div class="reward-cost">500 <i class="fas fa-coins"></i></div>
+                    <button class="btn-secondary reward-btn" data-translate="redeem">Redeem</button>
+                </div>
+                <div class="reward-card" data-cost="1000">
+                    <div class="reward-icon">📱</div>
+                    <h3>Apple Store</h3>
+                    <p data-translate="apple_discount">10% off accessories</p>
+                    <div class="reward-cost">1000 <i class="fas fa-coins"></i></div>
+                    <button class="btn-secondary reward-btn" data-translate="redeem">Redeem</button>
+                </div>
+                <div class="reward-card" data-cost="1500">
+                    <div class="reward-icon">💄</div>
+                    <h3>Sephora</h3>
+                    <p data-translate="sephora_discount">15% off beauty products</p>
+                    <div class="reward-cost">1500 <i class="fas fa-coins"></i></div>
+                    <button class="btn-secondary reward-btn" data-translate="redeem">Redeem</button>
+                </div>
+                <div class="reward-card" data-cost="2000">
+                    <div class="reward-icon">🎬</div>
+                    <h3>Cinema</h3>
+                    <p data-translate="cinema_discount">20% off movie tickets</p>
+                    <div class="reward-cost">2000 <i class="fas fa-coins"></i></div>
+                    <button class="btn-secondary reward-btn" data-translate="redeem">Redeem</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Chat Section -->
+        <section id="ai-chat" class="section">
+            <div class="chat-header">
+                <h2 data-translate="ai_assistant">AI Budget Assistant</h2>
+                <div class="chat-features">
+                    <button class="feature-btn" id="voice-btn" data-translate="voice_message">
+                        <i class="fas fa-microphone"></i> Voice Message
+                    </button>
+                    <button class="feature-btn" id="image-btn" data-translate="upload_image">
+                        <i class="fas fa-image"></i> Upload Image
+                    </button>
+                </div>
+            </div>
+            
+            <div class="chat-container">
+                <div class="chat-messages" id="chat-messages">
+                    <div class="message ai-message">
+                        <div class="message-avatar">🤖</div>
+                        <div class="message-content">
+                            <p data-translate="ai_welcome">Hi! I'm your AI budget assistant. Ask me anything about managing your money!</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chat-input">
+                    <input type="text" id="chat-input" placeholder="Ask me about budgeting..." data-translate-placeholder="ask_budgeting">
+                    <button id="send-message" class="btn-primary">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Hidden file input for images -->
+            <input type="file" id="image-input" accept="image/*" style="display: none;">
+        </section>
+
+        <!-- Support Section -->
+        <section id="support" class="section">
+            <div class="support-content">
+                <h2 data-translate="support">Support & Help</h2>
+                <div class="support-cards">
+                    <div class="support-card">
+                        <i class="fas fa-phone"></i>
+                        <h3 data-translate="contact_us">Contact Us</h3>
+                        <p>+971 56 160 0895</p>
+                        <button class="btn-secondary" data-translate="call_now">Call Now</button>
+                    </div>
+                    <div class="support-card">
+                        <i class="fas fa-envelope"></i>
+                        <h3 data-translate="email_support">Email Support</h3>
+                        <p>support@stashly.com</p>
+                        <button class="btn-secondary" data-translate="send_email">Send Email</button>
+                    </div>
+                    <div class="support-card">
+                        <i class="fas fa-question-circle"></i>
+                        <h3 data-translate="faq">FAQ</h3>
+                        <p data-translate="common_questions">Common questions and answers</p>
+                        <button class="btn-secondary" data-translate="view_faq">View FAQ</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Expense Modal -->
+    <div id="expense-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 data-translate="add_expense">Add Expense</h2>
+            <form id="expense-form">
+                <input type="number" id="expense-amount" placeholder="Amount" required>
+                <select id="expense-category" required>
+                    <option value="" data-translate="select_category">Select Category</option>
+                    <option value="needs" data-translate="needs">Needs</option>
+                    <option value="wants" data-translate="wants">Wants</option>
+                </select>
+                <input type="text" id="expense-description" placeholder="Description" data-translate-placeholder="description">
+                <button type="submit" class="btn-primary" data-translate="add_expense">Add Expense</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Goal Modal -->
+    <div id="goal-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 data-translate="add_goal">Add Financial Goal</h2>
+            <form id="goal-form">
+                <input type="text" id="goal-title" placeholder="Goal Title" data-translate-placeholder="goal_title" required>
+                <input type="number" id="goal-amount" placeholder="Target Amount" data-translate-placeholder="target_amount" required>
+                <input type="date" id="goal-date" required>
+                <textarea id="goal-description" placeholder="Description" data-translate-placeholder="description"></textarea>
+                <button type="submit" class="btn-primary" data-translate="add_goal">Add Goal</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
