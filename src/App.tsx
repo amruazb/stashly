@@ -1,85 +1,64 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Routes, Route, Link, useLocation } from 'react-router-dom';
 
-function LeaderboardModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
-  if (!isOpen) return null;
-  // Mock leaderboard data
-  const leaderboard = [
-    { name: 'Anonymous Owl', score: 120 },
-    { name: 'Anonymous Fox', score: 110 },
-    { name: 'Anonymous Tiger', score: 105 },
-    { name: 'Anonymous Panda', score: 100 },
-    { name: 'Anonymous Dolphin', score: 95 },
+function Navbar() {
+  const location = useLocation();
+  const navItems = [
+    { name: 'Dashboard', path: '/' },
+    { name: 'Goals', path: '/goals' },
+    { name: 'Rewards', path: '/rewards' },
+    { name: 'AI Assistant', path: '/ai-assistant' },
+    { name: 'Support', path: '/support' },
   ];
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-lg p-6 w-80 relative">
-        <button
-          className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-          onClick={onClose}
-        >
-          ×
-        </button>
-        <h2 className="text-xl font-bold mb-4 text-center">Leaderboard</h2>
-        <ol className="space-y-2">
-          {leaderboard.map((entry, idx) => (
-            <li key={idx} className="flex justify-between">
-              <span>{idx + 1}. {entry.name}</span>
-              <span className="font-semibold">{entry.score}</span>
-            </li>
-          ))}
-        </ol>
+    <nav className="bg-white shadow p-4 flex justify-between items-center">
+      <div className="flex gap-12 mx-auto">
+        {navItems.map((item) => (
+          <Link
+            key={item.name}
+            to={item.path}
+            className={`font-bold text-lg transition hover:text-blue-600 ${location.pathname === item.path ? 'text-blue-600' : 'text-gray-800'}`}
+          >
+            {item.name}
+          </Link>
+        ))}
       </div>
-    </div>
+      <div>
+        <span className="inline-block w-16 h-16 rounded-full bg-gradient-to-tr from-blue-400 to-green-300 flex items-center justify-center text-4xl">
+          <span role="img" aria-label="avatar">🧑‍🎓</span>
+        </span>
+      </div>
+    </nav>
   );
 }
 
-function LeaderboardCard() {
-  // Mock leaderboard data (same as modal)
-  const leaderboard = [
-    { name: 'Anonymous Owl', score: 120 },
-    { name: 'Anonymous Fox', score: 110 },
-    { name: 'Anonymous Tiger', score: 105 },
-    { name: 'Anonymous Panda', score: 100 },
-    { name: 'Anonymous Dolphin', score: 95 },
-  ];
-  return (
-    <div className="bg-white rounded-lg shadow-lg p-6 w-80 mx-auto mt-8">
-      <h2 className="text-xl font-bold mb-4 text-center">Leaderboard</h2>
-      <ol className="space-y-2">
-        {leaderboard.map((entry, idx) => (
-          <li key={idx} className="flex justify-between">
-            <span>{idx + 1}. {entry.name}</span>
-            <span className="font-semibold">{entry.score}</span>
-          </li>
-        ))}
-      </ol>
-    </div>
-  );
+function Dashboard() {
+  return <div className="p-8 text-center text-2xl">Welcome to the Dashboard!</div>;
+}
+function Goals() {
+  return <div className="p-8 text-center text-2xl">Your Goals will appear here.</div>;
+}
+function Rewards() {
+  return <div className="p-8 text-center text-2xl">Check your Rewards here.</div>;
+}
+function AIAssistant() {
+  return <div className="p-8 text-center text-2xl">AI Assistant is ready to help you.</div>;
+}
+function Support() {
+  return <div className="p-8 text-center text-2xl">Support page coming soon.</div>;
 }
 
 function App() {
-  const [showLeaderboard, setShowLeaderboard] = useState(false);
-
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Navbar */}
-      <nav className="bg-white shadow p-4 flex justify-between items-center">
-        <span className="font-bold text-lg">Project Bolt</span>
-        <button
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
-          onClick={() => setShowLeaderboard(true)}
-        >
-          Leaderboard
-        </button>
-      </nav>
-      {/* Leaderboard Card (on dashboard) */}
-      <LeaderboardCard />
-      {/* Main Content */}
-      <div className="flex items-center justify-center h-[60vh]">
-        <p>Start prompting (or editing) to see magic happen :)</p>
-      </div>
-      {/* Leaderboard Modal */}
-      <LeaderboardModal isOpen={showLeaderboard} onClose={() => setShowLeaderboard(false)} />
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/goals" element={<Goals />} />
+        <Route path="/rewards" element={<Rewards />} />
+        <Route path="/ai-assistant" element={<AIAssistant />} />
+        <Route path="/support" element={<Support />} />
+      </Routes>
     </div>
   );
 }
